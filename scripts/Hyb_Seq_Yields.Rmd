@@ -1,0 +1,75 @@
+---
+title: "Hyb_seq_yields"
+author: "Reed"
+date: "3/31/2021"
+output: pdf_document
+---
+
+```{r, library, results = 'hide', message = F, warning = F, echo = FALSE}
+library(tidyverse)
+library(ggridges)
+```
+
+```{r}
+dat <- read.csv("Hyb_seq_results.csv") %>% 
+  rename(pcr = 'ï..pcr_batch')
+  
+total <- dat %>% 
+  group_by(pool) %>% 
+  summarise(dna_conc = sum(yield_ng)/20) # desired pool volume
+
+```
+
+Simulate different fragment lengths
+```{r}
+total <- total %>% 
+  mutate(y_nm.300 = (dna_conc/(300 * 660) * 1000000)) %>% 
+  mutate(y_nm.315 = (dna_conc/(315 * 660) * 1000000)) %>% 
+  mutate(y_nm.330 = (dna_conc/(330 * 660) * 1000000)) %>% 
+  mutate(y_nm.345 = (dna_conc/(345 * 660) * 1000000)) %>% 
+  mutate(y_nm.360 = (dna_conc/(360 * 660) * 1000000)) %>% 
+  mutate(y_nm.375 = (dna_conc/(375 * 660) * 1000000)) %>% 
+  mutate(y_nm.390 = (dna_conc/(390 * 660) * 1000000)) %>% 
+  mutate(y_nm.405 = (dna_conc/(405 * 660) * 1000000)) %>% 
+  mutate(y_nm.420 = (dna_conc/(420 * 660) * 1000000)) %>% 
+  mutate(y_nm.435 = (dna_conc/(435 * 660) * 1000000)) %>% 
+  mutate(y_nm.450 = (dna_conc/(450 * 660) * 1000000)) %>% 
+  mutate(y_nm.465 = (dna_conc/(465 * 660) * 1000000)) %>% 
+  mutate(y_nm.480 = (dna_conc/(480 * 660) * 1000000)) %>% 
+  mutate(y_nm.495 = (dna_conc/(495 * 660) * 1000000)) %>% 
+  mutate(y_nm.510 = (dna_conc/(510 * 660) * 1000000)) %>% 
+  mutate(y_nm.525 = (dna_conc/(525 * 660) * 1000000)) %>% 
+  mutate(y_nm.540 = (dna_conc/(540 * 660) * 1000000)) %>% 
+  mutate(y_nm.555 = (dna_conc/(555 * 660) * 1000000)) %>% 
+  mutate(y_nm.570 = (dna_conc/(570 * 660) * 1000000)) %>% 
+  mutate(y_nm.585 = (dna_conc/(585 * 660) * 1000000)) %>% 
+  mutate(y_nm.600 = (dna_conc/(600 * 660) * 1000000)) %>% 
+  mutate(y_nm.615 = (dna_conc/(615 * 660) * 1000000)) %>% 
+  mutate(y_nm.630 = (dna_conc/(630 * 660) * 1000000)) %>% 
+  mutate(y_nm.645 = (dna_conc/(645 * 660) * 1000000)) %>% 
+  mutate(y_nm.660 = (dna_conc/(660 * 660) * 1000000)) %>% 
+  mutate(y_nm.675 = (dna_conc/(675 * 660) * 1000000)) %>% 
+  mutate(y_nm.695 = (dna_conc/(695 * 660) * 1000000)) %>% 
+  mutate(y_nm.710 = (dna_conc/(710 * 660) * 1000000)) %>% 
+  pivot_longer(cols = starts_with("y_nm."), names_to = "bp_simulated") %>% 
+  mutate(pool = as.factor(pool))
+
+ggplot(total, aes(x = value, y = pool, fill = 0.5 - abs(0.5 - stat(ecdf)))) +
+  stat_density_ridges(geom = "density_ridges_gradient", calc_ecdf = TRUE) +
+  scale_fill_viridis_c(name = "Tail probability", direction = -1) +
+  geom_vline(xintercept = 4) +
+  theme_bw() +
+  labs(title = "Realized and Needed Hyb-Seq Concentrations for MiSeq",
+              subtitle = "Simulated Mean Sequences Lengths (300 - 710, intevals of 15)",
+              x = "Molarity (nM) DNA at different fragment lengths. 4nM indicated by black line", y = "Pools") +
+  theme(plot.title = element_text(hjust = 0.5), 
+        plot.subtitle = element_text(hjust = 0.5))
+
+#ggsave("density.png")
+```
+
+```{r, echo=FALSE, out.width = '20%', out.height = '20%',fig.align = 'center'}
+knitr::include_graphics(paste0(here::here(), '/data/images/barbara_mcclintock.png'))
+```
+
+

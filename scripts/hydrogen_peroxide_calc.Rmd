@@ -1,0 +1,48 @@
+---
+title: "Hydrogen peroxide calculator"
+author: "Reed, M. Bickner, E. Woodsworth, & A. Litz"
+output:
+  pdf_document: default
+---
+
+Hydrogen peroxide appears to work very well for cleaning up bee fecal loads for microscopic analysis of the pollen grains within it. This technique is very fast, remarkably cheap, non-toxic, and convenient. 
+
+Interactive Input Goes Here
+```{r}
+no_samples <- 50 # how many samples to process
+conc.h2o2 <- .3 # the concentration of the HOOH stock bottle in decimal e.g. 0.3 = 30%
+conc.solution <- 0.05 # desired conc.
+solution.per.sample <- 0.2 # volume per sample in milliliter, we recommend 200 microliter
+```
+
+```{r, echo = F, warning = F, message = F, comment = F}
+sol_to_make <- c('Total Volume of Hydrogen Peroxide to make (ml):' = no_samples * solution.per.sample) # about how much ul per sample
+vol_h202_to_add <- c('Total Volume of Hydrogen Peroxide stock to add (ml):' = as.numeric((conc.solution * sol_to_make)/conc.h2o2))
+vol_water <- c('Total Volume of water to add (ml):' = as.numeric(sol_to_make - vol_h202_to_add))
+
+vol_h202_to_add <- round(vol_h202_to_add, digits = 1)
+vol_water <- round(vol_water, digits = 1)
+
+rm(no_samples, conc.h2o2)
+```
+
+\begin{center}
+```{r, echo = F, comment = ""}
+writeLines(paste(conc.solution*100, 'V./V. solution of Hydrogen Peroxide'))
+rm(conc.solution)
+```
+\end{center}
+
+```{r, echo = F, comment = ""}
+writeLines(paste(names(sol_to_make), sol_to_make,  sep = " ",collapse = ","))
+writeLines(paste(names(vol_h202_to_add), vol_h202_to_add,  sep = " ",collapse = ","))
+writeLines(paste(names(vol_water), vol_water,  sep = " ",collapse = ","))
+
+rm(sol_to_make, vol_h202_to_add, vol_water)
+```
+
+```{r, echo=FALSE, out.width = '20%', out.height = '20%',fig.align = 'center'}
+set_here()
+knitr::include_graphics(paste0(here::here(), '/data/images/barbara_mcclintock.png'))
+```
+

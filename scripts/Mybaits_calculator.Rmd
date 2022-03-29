@@ -1,0 +1,133 @@
+---
+title: "MyBaits calculators"
+author: "Hilary Noble & steppe"
+output: pdf_document
+---
+\vspace{-5truemm}
+
+This calculator is for the use of the Angiosperms 353 probes produced by Arbor BioSciences. It currently supports baits version 4. 
+\begin{center}
+Interactive input Section
+\end{center}
+```{r, Interactive Input, results = 'hide', message = F, warning = F}
+baits_vers <- 4 # currently 5 is the new new, but 4 is still around. 
+no_pools <- 9 # how many pools do you have? 
+pipette_margin <- 1.05 # from 1 (no margin) - 1.2
+centrifuge_tubes <- 200 # in ul. 200 or 1500/1700
+baits_rxn <- 0.33 # volume baits used for hybridization from 0.25 for 1/4 to 1 for full rxns
+library_amp_volume <- 10 #  15 or 10 ul of Hyb-Seq template during library amplification? 
+```
+\begin{center}
+Hybdrization Step
+\end{center}
+```{r, Preparation of Baits, results = 'hide', message = F, warning = F, echo = FALSE}
+Hyb_N <- c('Volume Hyb N to add (ul):' = (9.25 * pipette_margin) * no_pools)
+Hyb_S <- c('Volume Hyb S to add (ul):' = (3.5 * pipette_margin) * no_pools)
+Hyb_D <- c('Volume Hyb D to add (ul):' = (0.5 * pipette_margin) * no_pools)
+Hyb_R <- c('Volume Hyb R to add (ul):' = (1.25 * pipette_margin) * no_pools)
+Baits <- c('Volume Hyb Baits to add (ul):' = ((5.5 * baits_rxn) * pipette_margin) * no_pools)
+```
+
+
+```{r, comment = "", echo = FALSE}
+writeLines(paste(names(Hyb_N), Hyb_N,  sep = " ",collapse = ","))
+writeLines(paste(names(Hyb_S), Hyb_S,  sep = " ",collapse = ","))
+writeLines(paste(names(Hyb_D), Hyb_D,  sep = " ",collapse = ","))
+writeLines(paste(names(Hyb_R), Hyb_R,  sep = " ",collapse = ","))
+writeLines(paste(names(Baits), Baits,  sep = " ",collapse = ","))
+
+rm(Hyb_N, Hyb_S, Hyb_D, Hyb_R, Baits, baits_rxn)
+```
+
+\begin{center}
+Washing Hybdrization Product
+\end{center}
+```{r, Hybridization Wash - Wash Buffer X, results = 'hide', message = F, warning = F, echo = FALSE}
+
+wash_buff_x_volume <- if(centrifuge_tubes == 200){
+  (no_pools * 4 * .180) * pipette_margin
+} else {
+  (no_pools * 3 * .375) * pipette_margin
+}
+
+Hyb_S_wash <- c('Volume Hyb S to add (ul):' = (round(wash_buff_x_volume * 0.008 * 1000, 2)))
+wash_buffer_X <- c('Volume Wash Buffer to add (mL):' = (round(wash_buff_x_volume * 0.2, 2)))
+water <- c('Volume nuclease free water to add (mL):' = (round(wash_buff_x_volume * 0.792, 2)))
+```
+
+
+```{r, comment = "", echo = FALSE}
+
+writeLines(paste(names(Hyb_S_wash), Hyb_S_wash,  sep = " ",collapse = ","))
+writeLines(paste(names(wash_buffer_X), wash_buffer_X,  sep = " ",collapse = ","))
+writeLines(paste(names(water), water,  sep = " ",collapse = ","))
+
+rm(Hyb_S_wash, wash_buffer_X, water, wash_buff_x_volume)
+```
+
+
+```{r, Hybridization Wash - Bead Preperation Mix, results = 'hide', message = F, warning = F, echo = FALSE}
+Dynabeads <-  c('Volume of Dynabeads to add (ul):' = (30 * pipette_margin) * no_pools)
+Binding_buffer <- c('Volume of Binding Buffer to add (ul):' = (200 * pipette_margin) * no_pools)
+Resuspension_buffer <- c('Volume of Resuspension Buffer to add (ul):' = (70 * pipette_margin) * no_pools)
+```
+
+
+```{r, comment = "", echo = FALSE}
+writeLines(paste(names(Dynabeads), Dynabeads,  sep = " ",collapse = ","))
+writeLines(paste(names(Binding_buffer), Binding_buffer,  sep = " ",collapse = ","))
+writeLines(paste(names(Resuspension_buffer), Resuspension_buffer,  sep = " ",collapse = ","))
+
+rm(Dynabeads, Binding_buffer, Resuspension_buffer, centrifuge_tubes)
+```
+\begin{center}
+PCR amplification of Libraries
+\end{center}
+```{r, PCR Amplification, results = 'hide', message = F, warning = F, echo = FALSE}
+two_x_kapa_hifi <- 25 *  no_pools 
+illumina_F_primer <- 2.5 * no_pools 
+illumina_R_primer <- 2.5 * no_pools 
+
+vols <- ((two_x_kapa_hifi + illumina_F_primer + illumina_R_primer + (library_amp_volume * no_pools)) 
+         / no_pools)
+
+water <- c('Volume of nuclease free water to add (ul):' = (50 - vols) * no_pools* pipette_margin)
+two_x_kapa_hifi <- c('Volume of 2x Kapa HIFI hotstart to add (ul):' = (two_x_kapa_hifi * pipette_margin))
+illumina_F_primer <- c('Volume of 500 nM Illumina Forward Primer (ul):' = (illumina_F_primer * pipette_margin))
+illumina_R_primer <- c('Volume of 500 nM Illumina Reverse Primer (ul):' = (illumina_R_primer * pipette_margin))
+
+rm(vols)
+```
+
+
+```{r, comment = "", echo = FALSE}
+writeLines(paste(names(two_x_kapa_hifi), two_x_kapa_hifi,  sep = " ",collapse = ","))
+writeLines(paste(names(illumina_F_primer), illumina_F_primer,  sep = " ",collapse = ","))
+writeLines(paste(names(illumina_R_primer), illumina_R_primer,  sep = " ",collapse = ","))
+writeLines(paste(names(water), water,  sep = " ",collapse = ","))
+
+rm(two_x_kapa_hifi, illumina_R_primer, illumina_F_primer, water, library_amp_volume, baits_vers)
+```
+
+\begin{center}
+Removing and Cleaning up Beads - if you used bead on PCR
+\end{center}
+
+```{r, echo = F}
+vol_etoh_solution_required <- (200 * 2) * no_pools * pipette_margin 
+# 1.05 term in the main solution deals with the problem of miscibility between ethanol and water. 
+
+vol_etoh <- vol_etoh_solution_required * 0.8
+water <- vol_etoh_solution_required * 0.2
+```
+
+
+```{r,comment = "", echo = FALSE}
+
+writeLines(paste("To Prepare", round(vol_etoh_solution_required, 1), 'ul of 80% v.v. EtOH'))
+writeLines(paste("Add", round(vol_etoh, 1), "ul of 200 proof Ethanol"))
+writeLines(paste("And", round(water, 1), "ul of nuclease free water"))
+
+rm(pipette_margin, vol_etoh, vol_etoh_solution_required, water, no_pools)
+```
+

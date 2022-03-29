@@ -1,0 +1,103 @@
+---
+title: "Slide Preservatives Calculator"
+author: "Reed & Emily"
+date: "3/9/2021"
+output: pdf_document
+---
+
+
+Background information:
+
+# Paraloid b-72 Preperation. 
+
+Paraloid B-72, Ethyl methacrylate, is an excellent long term adhesive to use in archival settings. However, it is most economical to purchase it as a solid, and prepare a liquid suspension of it as needed. The particle size of the solid are quite large, and take some time to dissolve in a suitable solvent, such as acetone. 
+
+Given that acetone is most easily measured as a volume, whereas the irregularity of the Paraloid solids are measured as a mass, a simple converter is useful as one must prepare this in the morning before their coffee has kicked in. Given the shape of the Paraloid solids, it is best to tailor the amount of acetone to the weight of the solids. 
+
+
+Density of Paraloid B-72: 1.15 g/Cm3. 
+Density of Acetone: 0.791 g/mL. 
+Remember 1 cm^3 is equal to one mL. 
+
+Use weights of gram for the Paraloid. 
+
+## Interactive Input # 1
+```{r}
+paraloid_mass <- 0.86 # grams of paraloid weighed. 
+```
+One may crush this material using a pestle & mortar to break it into smaller fragments which will dissolve more rapidly into solution. 
+
+
+Volume = Mass / Density
+```{r, echo = F}
+paraloid_density <- 1.15
+paraloid_vol <- paraloid_mass / paraloid_density
+```
+
+To calculate a reverse percentage (A) divide the Volume of the Paraloid glue by its desired percent concentration in the product (20% v./v.), to generate what 1% of the solution will be. (B) Now multiple by 100 to estimate the total volume of the solution. 
+
+```{r, echo = F, comment=""}
+total_solution_to_make <- (paraloid_vol/20) *100 
+# STEPS A & B, give us how much solution
+# we need to reach our desired concentration
+vol_acetone_to_prepare <- c('Volume Acetone to add (ml):' = total_solution_to_make * .80) 
+# we multiply the amount of solution we need to make,  by the proportion of the solution which will be acetone. 
+vol_acetone_to_prepare <- round(vol_acetone_to_prepare, digits = 1) 
+# we will round this  value to a tenths place  for convenience
+
+writeLines(paste(names(vol_acetone_to_prepare), vol_acetone_to_prepare,  sep = " ",collapse = ","))
+```
+
+```{r, echo = FALSE}
+rm(paraloid_mass, paraloid_density, paraloid_vol, total_solution_to_make, vol_acetone_to_prepare)
+```
+
+
+# Canada Balsam Preparation. 
+
+Because canada balsam is so heavy it is not very good for measuring as a liquid. It can be put in a falcon tube and measured by the graticule lines (probably at least decent accuracy), but it may be slow flowing some days and hard to determine how much is in there. 
+
+We can dilute Canada Balsam somewhat.
+
+Most folks recommend dilution in xylene or toulene, but these benzene based solvents are kind of nasty, other recommended alternatives are chloroform and ether. Chloroform is still pretty nasty, and neither of these pair  are ok to work with outside of a fume hood. 
+
+Some folks say ethanol works, and I hope it mostly does, it should do pretty OK because this Canada Balsam product still seems to have some essential oils in. But I also use a pinch of Ethyl acetate, which is much less toxic than the benzene based compounds, and still relatively non-polar relative to water and Ethanol. I am hoping we can dilute this solution around 10% hopefully with about 4% being ethyl acetate, and 6% being ethanol. 
+
+What I am hoping is that the ethyl acetate will be miscible with some of the longer chained molecules in the balsam, and ethanol will mix with the rest. 
+
+Compounds & Relative Polarities:
+
+p-Xylene 0.074
+Toluene 0.099
+Ether 0.177
+Ethyl Acetate 0.228
+Chloroform: 0.259
+Ethyl alcohol:  0.654
+
+## Interactive input # 2 !
+
+I recommend about 5 mL balsam to 50 slides. 
+```{r}
+vol_canada_balsam <- 0.9 # CHANGE ME. 
+```
+
+
+```{r, echo = F, comment=""}
+balsam_sol_to_make <- (vol_canada_balsam / 85) * 100 # we want a 90% solution of Canada Balsam
+vol_etoh_to_add <- c('Volume EtOH to add (ml):' =  balsam_sol_to_make * 0.075) # 6% ethanol
+vol_ethyl_acetate <- c('Volume Ethyl Acete to add (ml):' =  balsam_sol_to_make * 0.075) # 4% ethyl alcohol. 
+
+vol_etoh_to_add <- round(vol_etoh_to_add, digits = 3) # round to a volume we can pipette
+vol_ethyl_acetate <- round(vol_ethyl_acetate, digits = 3) # round to a volume we can pipette
+
+writeLines(paste(names(vol_etoh_to_add), vol_etoh_to_add,  sep = " ",collapse = ","))
+writeLines(paste(names(vol_ethyl_acetate), vol_ethyl_acetate,  sep = " ",collapse = ","))
+```
+
+```{r, echo = FALSE}
+rm(vol_canada_balsam, balsam_sol_to_make, vol_etoh_to_add, vol_ethyl_acetate)
+```
+
+```{r, echo=FALSE, out.width = '20%', out.height = '20%',fig.align = 'center'}
+knitr::include_graphics(paste0(here::here(), '/data/images/barbara_mcclintock.png'))
+```

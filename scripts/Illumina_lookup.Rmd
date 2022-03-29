@@ -1,0 +1,51 @@
+---
+title: "Illumina_index_lookup"
+author: "Reed & Zoe D-M"
+output: pdf_document
+---
+
+
+```{r, library, results = 'hide', message = F, warning = F, echo = FALSE}
+library(tidyverse)
+```
+
+Sequences are nigh. 
+
+https://www.neb.com/-/media/nebus/files/manuals/manuale7600.pdf?rev=4eff4ab515cd4637bbb8422f92fb1c05
+
+^ raw data from above. filthly pdf, was not easy to coerce to csv or txt. Transcribed by hand..........................................................
+
+```{r}
+primers <- read.csv("Illumina_i5_i7_dual_index.csv") %>% 
+  select(PRIMER, NOVASEQ)
+
+p_i5 <- primers %>% 
+  filter(str_detect(PRIMER, "i5")) %>%
+  mutate(PRIMER = str_remove(PRIMER, "i50")) %>% 
+  rename(I5_SEQ = NOVASEQ)
+
+p_i7 <- primers %>% 
+  filter(str_detect(PRIMER, "i7")) %>% 
+  mutate(PRIMER = str_remove(PRIMER, "i70|i7")) %>% 
+  rename(I7_SEQ = NOVASEQ)
+
+dat <- readxl::read_xlsx("qubit_results_library_prep_1.xlsx") %>% 
+  filter(extract_id != "13a|ta") %>% 
+  filter(Species != "nc") %>% 
+  select(extract_id, i_5, i_7) %>% 
+  mutate(across(c("i_5", "i_7"), function(x) as.character(x)))
+
+dat <- dat %>% 
+  left_join(p_i5, by = c('i_5' = "PRIMER")) %>% 
+  left_join(p_i7, by = c("i_7" = "PRIMER")) %>% 
+  select(-i_5, -i_7)
+
+#write.csv(dat, "Benkendorf_combos_fixed.csv", row.names = F)
+
+```
+
+```{r}
+
+```
+
+

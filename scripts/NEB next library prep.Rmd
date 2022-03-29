@@ -1,0 +1,89 @@
+---
+title: "NEB Next Ultra 2 FS DNA Library Prep Caculator"
+output: pdf_document
+---
+\vspace{-5truemm}
+Section 2. For DNA inputs from 100 - 500 ng
+
+\begin{center}
+Interactive input goes here!
+\end{center}
+```{r}
+no_samples <- 8 # How many samples are you doing
+pipette_margin <- 1.15 # extra solution. 1.2 is default. Minimum value is 1 !!!
+enzyme_conc <- 0.25 # concentration of enzyme are you using for fragmentation? 
+volume <- 0.5 # half reactions or full reactions? 
+```
+\begin{center}
+Fragmentation Solution: 
+\end{center}
+```{r, echo = FALSE, comment=""}
+FS_Reaction_buffer <- 7 * volume * no_samples * pipette_margin
+FS_Enzyme_mix <- 2 * enzyme_conc * no_samples * pipette_margin
+
+writeLines(paste("To prepare", FS_Reaction_buffer + FS_Enzyme_mix, "ul of the Fragmentation mix"))
+writeLines(paste("Add", FS_Reaction_buffer, "ul of the Ultra II FS Reaction Buffer"))
+writeLines(paste("And", FS_Enzyme_mix, "ul of the Ultra II FS Enzyme Mix"))
+```
+\begin{center}
+Adaptor Ligation Solution:
+\end{center}
+```{r, echo = FALSE, comment=""}
+Ligation_Master_Mix <- 30 * volume * no_samples * pipette_margin
+Ligation_Enhancer <- 1 * volume * no_samples * pipette_margin
+
+writeLines(paste("To prepare", round(Ligation_Master_Mix + Ligation_Enhancer, 1), "ul of the Adaptor Ligation mix"))
+writeLines(paste("Add", round(Ligation_Master_Mix, 1), "ul of the Ultra II Ligation Master Mix"))
+writeLines(paste("And", round(Ligation_Enhancer, 1), "ul of the Ligation Enhancer"))
+```
+Remember: These 2 solutions may be mixed, and kept at 4*C for up to 8 hours. 
+The Adaptors need to be added separately to each sample. 
+\begin{center}
+0.1x TE:
+\end{center}
+```{r, echo = FALSE, comment=""}
+User_Enzyme <- 3 * volume
+Adaptor_for_Illumina <- 2.5 * volume
+Input_Sample_Size <- 26 * volume
+
+# note to self need to clean up this calculation i.e. new constant for volume
+
+samp_volume_2.3 <- (((FS_Reaction_buffer + FS_Enzyme_mix + Ligation_Master_Mix + Ligation_Enhancer)/pipette_margin)/no_samples) + User_Enzyme + Adaptor_for_Illumina + Input_Sample_Size
+
+needed_TE <- 100 - samp_volume_2.3
+one_tenth_TE_2.3.1 <- needed_TE * no_samples * pipette_margin
+one_tenth_TE_2.3.13 <- 17 * no_samples 
+one_tenth_TE_2.5.9 <- 33 * no_samples
+
+total_volume_1x_TE_to_make <- (one_tenth_TE_2.3.1 + one_tenth_TE_2.3.13 + one_tenth_TE_2.5.9) * pipette_margin
+volume_1X_TE_to_add <- total_volume_1x_TE_to_make * 0.1
+volume_h20_to_add_TE <- total_volume_1x_TE_to_make * 0.9
+
+writeLines(paste("prepare", total_volume_1x_TE_to_make, 'ul of 0.1X TE, enough for the entire library prep'))
+writeLines(paste("Add", round(volume_1X_TE_to_add, 1), "ul of 1X TE buffer"))
+writeLines(paste("And", round(volume_h20_to_add_TE, 1), "ul of nuclease free water"))
+
+```
+\begin{center}
+80 percent EtOH (v./v.):
+\end{center}
+```{r, echo = FALSE, comment=""}
+
+vol_etoh_solution_required <- (200*4 *1.05) * no_samples * pipette_margin 
+# 1.05 term in the main solution deals with the problem of miscibility between ethanol and water. 
+
+vol_etoh <- vol_etoh_solution_required * 0.8
+vol_h20_to_add_ETOH <- vol_etoh_solution_required * 0.2
+
+writeLines(paste("Prepare", round(vol_etoh_solution_required, 1), 'ul of 80% v.v. EtOH, enough for the entire library prep'))
+
+writeLines(paste("Add", round(vol_etoh, 1), "ul of 200 proof Ethanol"))
+writeLines(paste("And", round(vol_h20_to_add_ETOH, 1), "ul of nuclease free water"))
+
+rm(Adaptor_for_Illumina, enzyme_conc, FS_Enzyme_mix, FS_Reaction_buffer, Input_Sample_Size, Ligation_Enhancer, Ligation_Master_Mix, no_samples, pipette_margin, samp_volume_2.3, User_Enzyme, volume)
+```
+
+Put parafilm on this tube, and place in freezer, if you are using it across 2 days. 
+```{r, echo=FALSE, out.width = '20%', out.height = '20%',fig.align = 'center'}
+knitr::include_graphics(paste0(here::here(), '/data/images/barbara_mcclintock.png'))
+```

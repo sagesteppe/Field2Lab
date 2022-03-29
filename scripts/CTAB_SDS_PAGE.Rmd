@@ -1,0 +1,168 @@
+---
+title: "Pollen CTAB & SDS Buffer Calculator"
+output:
+  pdf_document: default
+---
+
+\vspace{-5truemm}
+We recommend that a pipette margin of 1.2 is applied for all reagents in this kit less the RNAse, and EDTA. Furthermore given the viscous nature of the CTAB and SDS Page solution we recommend an additional 1.2 volume is made (much will be lost to the exterior of the pipette tips, and it is hard to retrieve from the bottom of a glass bottle).
+
+If you are using this to order supplies, we also STRONGLY RECOMMEND (just please do this for me) that you use 1000 ul pipette tips for handling these solutions. They behave quite poorly. 
+
+## Interactive Input Section. 
+```{r}
+no_pollen_samples <- 100 # how many samples
+pipette_margin <- 1.2 # I can be changed to as low as 1.
+jar_buffer <- 1.1 # I can be changed to as low as 1. 
+molarity_TRIS_HCl <- 1 # molarity
+molarity_TRIS_Cl <- 1 # molarity
+molarity_EDTA <- 0.125 # molarity
+```
+
+Molar concentration =  moles of solutes / liters of solution
+\begin{center}
+SDS-PAGE Buffer
+\end{center}
+100 mM Tris-HCl, 50 mM EDTA, 50 mM NaCl, 10% SDS - pH 7.5, ca. 32 mL H2O
+
+```{r, echo = FALSE}
+total_vol_solution <- ((no_pollen_samples * 500 * jar_buffer * pipette_margin) /1000) 
+
+mass_SDS <- c('Mass SDS to add (g):' = total_vol_solution/10 * 0.99)
+mass_SDS <- round(mass_SDS, 2)
+
+mass_NaCl <- c('Mass Sodium Chloride to add (mg):' = 
+                ((0.05 * (total_vol_solution/1000) * 58.4)*1000))
+mass_NaCl <- round(mass_NaCl, 3)
+
+mass_EDTA <- c('Mass EDTA to add (mg):' = 
+                (0.05 * (total_vol_solution/1000) * 372.24) * 1000)
+
+mass_EDTA <- round(mass_EDTA, 2)
+
+vol_TRIS_HCl <- c('Volume 1 molar TRIS-HCl (mL):' = 
+              (0.1/molarity_TRIS_HCl * (total_vol_solution/1000)*1000))
+```
+
+```{r, comment="", echo = FALSE}
+
+writeLines(paste("To prepare", total_vol_solution, "mL of the SDS Page Buffer"))
+writeLines(paste(names(mass_SDS), mass_SDS, sep = " ", collapse = ","))
+writeLines(paste(names(mass_NaCl), mass_NaCl, sep = " ", collapse = ","))
+writeLines(paste(names(mass_EDTA), mass_EDTA, sep = " ", collapse = ","))
+writeLines(paste(names(vol_TRIS_HCl), vol_TRIS_HCl, sep = " ", collapse = ","))
+
+rm(mass_SDS, mass_NaCl, mass_EDTA, vol_TRIS_HCl, jar_buffer, molarity_TRIS_HCl)
+```
+
+\begin{center}
+10 Percent CTAB Solution
+\end{center}
+20 mM Tris-Cl pH. 8.0, 1.4 M NaCl, 10 mM EDTA pH 7.5, 10% CTAB, 5% PVP, 40 mL DiH2O
+
+```{r, echo = FALSE, comment=""}
+mass_CTAB <- c('Mass CTAB to add (g):' =
+                 total_vol_solution * 0.05)
+mass_CTAB <- round(mass_CTAB, 2)
+
+mass_NaCl_ctab <- c('Mass Sodium Chloride to add (g):' =
+                     (1.4 * (total_vol_solution/1000) * 58.4))
+mass_NaCl_ctab <- round(mass_NaCl_ctab, 3)
+
+mass_PVP <- c('Mass PVP add (g):' =
+                     total_vol_solution * 0.05)
+mass_PVP <- round(mass_PVP, 3)
+
+vol_TRIS_Cl <- c('Volume TRIS-Cl, 8.0 pH,  (mL):' = 
+              (0.02/molarity_TRIS_Cl * (total_vol_solution/1000)*1000))
+vol_TRIS_Cl <- round(vol_TRIS_Cl, 3)
+
+vol_EDTA <- c('Volume EDTA, 7.5 pH, (mL):' = 
+              (0.02/molarity_EDTA * (total_vol_solution/1000)*1000))
+vol_EDTA <- round(vol_EDTA, 3)
+```
+
+```{r, comment="", echo = FALSE}
+
+writeLines(paste("To prepare", total_vol_solution, "mL of 10% CTAB"))
+writeLines(paste(names(mass_CTAB), mass_CTAB, sep = " ", collapse = ","))
+writeLines(paste(names(mass_NaCl_ctab), mass_NaCl_ctab, sep = " ", collapse = ","))
+writeLines(paste(names(mass_PVP), mass_PVP, sep = " ", collapse = ","))
+writeLines(paste(names(vol_TRIS_Cl), vol_TRIS_Cl, sep = " ", collapse = ","))
+writeLines(paste(names(vol_EDTA), vol_EDTA, sep = " ", collapse = ","))
+
+rm(mass_CTAB, mass_NaCl_ctab, mass_PVP, vol_TRIS_Cl, vol_EDTA, total_vol_solution)
+```
+
+\begin{center}
+Sodium Acetate Solution (3mM)
+\end{center}
+```{r, echo = FALSE}
+sodium_acetate_vol <- (((no_pollen_samples * 100) * pipette_margin)/1000)
+mass_NaCl_SA <- c('Mass Sodium Acetate (mg)' = (0.003 * (sodium_acetate_vol/1000) * 58.4) *1000) 
+```
+
+```{r, comment="", echo = FALSE}
+writeLines((paste("To prepare", sodium_acetate_vol, "mL of 3mM Sodium Acetate Wash")))
+writeLines(paste(names(mass_NaCl_SA), mass_NaCl_SA, sep = " ", collapse = ","))
+
+rm(sodium_acetate_vol, mass_NaCl_SA)
+```
+
+# Items to Purchase
+
+\begin{center}
+Phenol Chloroform Isoamyl Alcohol
+\end{center}
+
+We recommend buying this pre-made but this is how much you will need, and how you could make it. Again Phenol is very nasty, and we STRONGLY recommend you buy this. Chloroform is pretty nasty too... You can find information on making this online, but you should not unless you **actually** have a degree in Chemistry and know what you are doing.. 
+
+```{r, echo = FALSE}
+phenol_chloroform_isoamyl <- no_pollen_samples * 0.500
+```
+
+```{r, comment = "", echo = FALSE}
+writeLines(paste("Purchase at least", phenol_chloroform_isoamyl, "mL of Phenol-Chloroform-Isoamyl Alchol"))
+rm(phenol_chloroform_isoamyl)
+```
+\begin{center}
+RNAse
+\end{center}
+Pollen may actually come alive in the buffers, but we are not really sure you need this much RNAse... Tests at 1/2 strength are strongly encouraged. 
+```{r, comment="", echo = FALSE, warning = FALSE, message=F}
+rnase <- (no_pollen_samples * 0.010)
+writeLines(paste("Purchase at least", rnase, "g of RNAse"))
+rm(rnase)
+```
+
+\begin{center}
+Proteinase K
+\end{center}
+
+Pollen is packed full of Protein, we are not sure if you really need this much Proteinase K... Tests at 1/2 and 1/4 strengths are strongly encouraged. 
+```{r, comment="", echo = FALSE}
+proK <- (no_pollen_samples * 0.03)
+writeLines(paste("This method suggests", proK, "g of Proteinase K"))
+rm(proK)
+```
+
+\begin{center}
+DTT
+\end{center}
+DTT is bought suspended, get at least this many moles, or this much mass, tailored for however you think... Can most likely sub for beta - mercaptoethanol... Tests at 1/2 and 1/4 strengths are strongly encouraged. 
+
+```{r, comment="", echo = FALSE}
+DTT <- no_pollen_samples * 0.0125
+DTT_mass <- DTT * 154.253
+writeLines(paste("This method suggests", DTT, "moles of DTT"))
+writeLines(paste("This method suggests", DTT_mass, "g of DTT"))
+rm(DTT, DTT_mass)
+```
+
+
+
+```{r, echo=FALSE, out.width = '20%', out.height = '20%',fig.align = 'center'}
+knitr::include_graphics(paste0(here::here(), '/data/images/barbara_mcclintock.png'))
+```
+
+

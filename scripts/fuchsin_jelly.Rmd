@@ -1,0 +1,55 @@
+---
+title: "Fuchsin Jelly calculator"
+output: pdf_document
+---
+
+How large of a batch would you like to make? -Accepts values in decimals.  e.g. a half batch would be 0.5
+
+My limited observation, from a museum perspective, is that the batches are enormous. I suspect a quarter batch would prep over 250 microscope slides, and allow for at least as many collections (but likey 2x-3x) from insects. 
+```{r, interactive input}
+batch_size <- 0.5 # in integer.decimal format, 0.5 left in as an example
+```
+
+
+```{r, echo = F, comment = ""}
+dih20 <- 175 * batch_size # 375
+glycerin <- 150 * batch_size
+gelatin <- 50 * batch_size
+phenol <- 5 * batch_size
+
+beaker_size <- if (batch_size <= 0.2){
+  100
+} else if(batch_size >= 0.2 & batch_size <= 0.3){
+  150
+} else if(batch_size >= 0.31 & batch_size <= 0.6){
+  250
+} else if(batch_size >= 0.61 & batch_size <= 1.2){
+  500
+} else if(batch_size >= 1.21 & batch_size <= 1.8){
+  750
+} else if(batch_size >= 1.81 & batch_size <= 2.5){
+  1000
+} else if(batch_size >= 2.51 & batch_size <= 5.1){
+  2000
+} else{
+  '*Consider several batches*'
+}
+
+writeLines(paste("Pour", 
+                 dih20, "mL deionized water into a", 
+                 beaker_size, "mL beaker on a hot plate and bring to ca. 60°C, \n with vigorous use of stir bar. Slowly pour in", 
+                 gelatin, "g of gelatin to the solution over \n the course of 30-45 minutes. Once all gelatin has dissolved into solution, add \n",
+                 glycerin, "mL of glycerin. If so desired, add", 
+                 phenol, "g of Phenol crystals now.")
+           )
+
+rm(batch_size, dih20, glycerin, gelatin, phenol, beaker_size)
+```
+
+Once all solutions are suspended slowly add Basic Fuchsin crystals. Bear in mind, that this acts as a strong dye, and minute quantities are needed. As the crystals stick to many surfaces, we are unable to provide quantitative values; but I would estimate to start with no more than as many crystals as it would take to sit end on end across your pinkey nail (this holds for as low as a quarter batch.) It is a solemn and sincere regret that i may afford you no more advice on this matter than as to: "make the solution the color of a fine claret red". 
+
+After removal of the stir bar he solution may be *gently* poured into containers and allowed to cool which will allow it to into jelly
+
+```{r, echo=FALSE, out.width = '20%', out.height = '20%',fig.align = 'center'}
+knitr::include_graphics(paste0(here::here(), '/data/images/barbara_mcclintock.png'))
+```
