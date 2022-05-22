@@ -1,7 +1,7 @@
 # Field2Lab
 pollipal and genomics starting to live here
 
-These were a ton of scripts I through together to document my masters dissertation which seeked to use the angiosperms 353 probes for plant metagenomics.
+These were a ton of scripts I threw together to document my masters dissertation which seeked to use the angiosperms 353 probes for plant metagenomics.
 Some of the scripts are more general usage for pollinator ecology. I plan on splitting out all of these and pushing out as part of two packages.
 A good amount of this info came from folks at CBG who employ some of these techniques more often than folks at smaller universities and institutes do. I hope their insight is helpful to your endeavors if you are in these camps. 
 
